@@ -1,0 +1,32 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+requests = "==2.20.0"
+certifi = "==2018.10.15"
+chardet = "==3.0.4"
+click = "==7.0"
+future = "==0.18.1"
+idna = "==2.7"
+itsdangerous = "==1.1.0"
+line-bot-sdk = "==1.14.0"
+pygraphviz = "==1.5"
+python-dotenv = "==0.10.3"
+six = "==1.12.0"
+transitions = "==0.6.9"
+urllib3 = "==1.24.3"
+bs4 = "==0.0.1"
+basketball-reference-web-scraper = "==4.4.1"
+numpy = "==1.17.4"
+pytest = "==5.3.5"
+Flask = "==1.0.2"
+Jinja2 = "==2.10.3"
+MarkupSafe = "==1.1.1"
+Werkzeug = "==0.16.0"
+
+[requires]
+python_version = "3.6"
