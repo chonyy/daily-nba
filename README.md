@@ -11,7 +11,7 @@
     <a target="_blank" href="http://makeapullrequest.com" title="PRs Welcome"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
 </p>
 
-> The LINE Bot that brings you everything you want from NBA.
+> 🏀 The NBA LINE Bot with 9 features!
 
 Watch NBA games, check the schedule, lookup the stats, search for players by using Daily-NBA. [Button carousel templates](https://developers.line.biz/en/reference/messaging-api/#buttons) are used for every states. Instead of typing bunch of word to the LINE bot, you can just simply **press buttons** on the carousel template. 
 
