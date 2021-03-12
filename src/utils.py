@@ -11,6 +11,7 @@ from linebot.models import TextSendMessage, ImageSendMessage, TemplateSendMessag
 access_token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", None)
 line_bot_api = LineBotApi(access_token)
 
+
 def send_text_message(reply_token, text):
     line_bot_api.reply_message(reply_token, TextSendMessage(text=text))
 
@@ -154,12 +155,12 @@ def send_button_carousel(id):
                             text='search team'
                         ),
                         MessageTemplateAction(
-                            label='NBA Meme',
-                            text='show meme'
-                        ),
-                        MessageTemplateAction(
                             label='NBA News',
                             text='show news'
+                        ),
+                        URITemplateAction(
+                            label='Creator',
+                            uri='https://www.linkedin.com/in/chonyy/'
                         )
                     ]
                 )

@@ -264,7 +264,7 @@ class TocMachine(GraphMachine):
         userid = event.source.user_id
         showschedule(userid)
 
-        img = 'https://cdn.vox-cdn.com/thumbor/BULQdZPlxSCT68S4y18mw9slB08=/0x0:3200x1800/1820x1024/filters:focal(1344x644:1856x1156):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/66324326/TheRinger_Top25NBAPlayers_2.7.png'
+        img = 'https://pbs.twimg.com/media/Eoa1VfWXIAsRTd8.jpg'
         title = 'Watch more'
         uptext = 'Search for team or back to menu'
         labels = ['Search team', 'back to menu']

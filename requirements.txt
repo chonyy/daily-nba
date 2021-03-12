@@ -19,4 +19,3 @@ bs4==0.0.1
 basketball-reference-web-scraper==4.4.1
 numpy==1.17.4
 pytest==5.3.5
-dotenv
