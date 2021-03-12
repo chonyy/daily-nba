@@ -1,27 +1,29 @@
 import os
-import sys
 
-from flask import Flask, jsonify, request, abort, send_file
+from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
-from utils import send_text_message, send_image_url
-from machine_configs import get_machine_configs
+from utils import send_text_message
+from machine import create_machine
 from dotenv import load_dotenv
 
 load_dotenv()
 app = Flask(__name__, static_url_path="")
 
 
-# get channel_secret and channel_access_token from your environment variable
+# Get channel_secret and channel_access_token from environment variable
 channel_access_token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", None)
 channel_secret = os.getenv("LINE_CHANNEL_SECRET", None)
 
 line_bot_api = LineBotApi(channel_access_token)
 parser = WebhookParser(channel_secret)
 
-machine = {}
+# Unique FSM for each user
+machines = {}
+
+# Simple callback endpoint for testing connection
 
 
 @app.route("/callback", methods=["POST"])
@@ -29,7 +31,6 @@ def callback():
     signature = request.headers["X-Line-Signature"]
     # get request body as text
     body = request.get_data(as_text=True)
-    # app.logger.info("Request body: " + body)
 
     # parse webhook body
     try:
@@ -65,9 +66,6 @@ def webhook_handler():
         abort(400)
 
     for event in events:
-        if event.source.user_id not in machine:
-            machine[event.source.user_id] = get_machine_configs()
-
         if not isinstance(event, MessageEvent):
             continue
         if not isinstance(event.message, TextMessage):
@@ -75,7 +73,12 @@ def webhook_handler():
         if not isinstance(event.message.text, str):
             continue
 
-        response = machine[event.source.user_id].advance(event)
+        # Create a machine for new user
+        if event.source.user_id not in machines:
+            machines[event.source.user_id] = create_machine()
+
+        # Advance the FSM for each MessageEvent
+        response = machines[event.source.user_id].advance(event)
         if response == False:
             send_text_message(event.reply_token, "Invalid command, try again")
 

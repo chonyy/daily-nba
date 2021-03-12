@@ -1,8 +1,5 @@
 from transitions.extensions import GraphMachine
-from flask import Flask, jsonify, request, abort, send_file
-from linebot import LineBotApi, WebhookParser
-from linebot.models import MessageEvent, TextMessage, TextSendMessage
-from utils import send_text_message, send_image_url, send_video_url, send_news_carousel, send_template_message, send_image_carousel, send_button_message, send_button_carousel, showGames, yesterGames, push_message, scrapeBoxscore, searchplayer, searchteam, showstanding, statleader, showschedule, showmeme, shownews, searchgame
+from utils import send_image_carousel, send_button_message, send_button_carousel, showGames, yesterGames, push_message, scrapeBoxscore, searchplayer, searchteam, showstanding, statleader, showschedule, showmeme, shownews, searchgame
 
 
 class TocMachine(GraphMachine):
@@ -46,7 +43,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_showstanding(self, event):
         text = event.message.text
-        return text.lower() == "show standing" 
+        return text.lower() == "show standing"
 
     def is_going_to_gameBoxscore(self, event):
         text = event.message.text
@@ -90,8 +87,6 @@ class TocMachine(GraphMachine):
         userid = event.source.user_id
         send_button_carousel(userid)
 
-
-
     def on_enter_testing(self, event):
         print("I'm entering testing")
         # reply_token = event.reply_token
@@ -112,7 +107,7 @@ class TocMachine(GraphMachine):
         reply_token = event.reply_token
         userid = event.source.user_id
 
-        lbj = 'https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fpeopledotcom.files.wordpress.com%2F2019%2F10%2Flebron-james.jpg&w=400&c=sc&poi=face&q=85'
+        lbj = 'https://cdn.nba.com/headshots/nba/latest/1040x760/2544.png'
         luka = 'https://www.talkbasket.net/wp-content/uploads/2019/11/THUMBNAIL_043-3.webp'
         freak = 'https://scd.infomigrants.net/media/resize/my_image_medium/4c1a91cf3cd1e4ec2f373a7e520e84b118a0f638.jpeg'
         harden = 'https://sportshub.cbsistatic.com/i/r/2019/10/07/3db9fcb5-5c81-46e1-ae16-fbb0f75b7e99/thumbnail/770x433/a0dfdaa544a8a4899f58aaada49772fd/james-harden.jpg'
@@ -130,7 +125,7 @@ class TocMachine(GraphMachine):
 
         reply_token = event.reply_token
         userid = event.source.user_id
-        
+
         img = 'https://images-na.ssl-images-amazon.com/images/I/61G5S99JAAL.jpg'
         title = 'Watch game scores'
         uptext = 'Which day would you like to watch?'
@@ -138,17 +133,12 @@ class TocMachine(GraphMachine):
         texts = ['today game', 'yesterday game', 'search game']
         send_button_message(userid, img, title, uptext, labels, texts)
 
-        # result = "Watch today game or yesterday game or search a date?\n"
-        # result += "(today game / yesterday game / search game)"
-        # push_message(userid, result)
-
-
     def on_enter_todayGame(self, event):
         print("I'm entering todayGame")
         reply_token = event.reply_token
         userid = event.source.user_id
         showGames(reply_token)
-        
+
         img = 'https://img.bleacherreport.net/img/images/photos/002/780/942/4e99edcf959c5743a660a70c378fbc0f_crop_north.jpg?h=533&w=800&q=70&crop_x=center&crop_y=top'
         title = 'Watch more'
         uptext = 'Check out game result or back to menu?'
@@ -161,7 +151,7 @@ class TocMachine(GraphMachine):
         reply_token = event.reply_token
         userid = event.source.user_id
         yesterGames(reply_token)
-        
+
         img = 'https://img.bleacherreport.net/img/images/photos/002/780/942/4e99edcf959c5743a660a70c378fbc0f_crop_north.jpg?h=533&w=800&q=70&crop_x=center&crop_y=top'
         title = 'Watch more'
         uptext = 'Check out game result or back to menu?'
@@ -176,7 +166,7 @@ class TocMachine(GraphMachine):
         playername = event.message.text
         try:
             searchplayer(reply_token, userid, playername)
-            img = 'https://thespinoff.co.nz/wp-content/uploads/2015/11/NBA_Background_Logos-850x510.jpg'
+            img = 'https://clutchpoints.com/wp-content/uploads/2020/07/Top-24-NBA-players-under-24.jpg'
             title = 'Watch more'
             uptext = 'Please choose'
             labels = ['Search more players', 'Search team', 'Back to menu']
@@ -208,19 +198,18 @@ class TocMachine(GraphMachine):
         except:
             push_message(userid, "Wrong format, please try again")
             self.go_back(event)
-        
 
     def on_enter_searchteam(self, event):
         print("I'm entering searchteam")
         reply_token = event.reply_token
         userid = event.source.user_id
 
-        lakers = 'https://worldsportlogos.com/wp-content/uploads/2019/06/Los-Angeles-Lakers-emblem.jpg'
+        lakers = 'https://www.skinit.com/media/catalog/product/cache/9dbe6a0c16a5b581719a1aa389879cfc/d/s/dstlak03_19.jpg'
         clippers = 'https://upload.wikimedia.org/wikipedia/en/thumb/b/bb/Los_Angeles_Clippers_%282015%29.svg/1200px-Los_Angeles_Clippers_%282015%29.svg.png'
         mavs = 'https://i.pinimg.com/originals/72/1a/8b/721a8bd73983160aa979575c9d65a085.jpg'
         bucks = 'https://www.chicagotribune.com/resizer/KBJvo-WTR6F4BynBsEdIJcUMPRk=/800x450/top/arc-anglerfish-arc2-prod-tronc.s3.amazonaws.com/public/K5UTVZBPEJHUFF3KIFZR5WNRPU.jpg'
         celtics = 'https://images.homedepot-static.com/productImages/f10649b1-73a2-4a69-963d-2d40fd77fae7/svn/green-applied-icon-wall-decals-nbop0203-64_1000.jpg'
-        
+
         urls = [mavs, bucks, celtics, lakers, clippers]
         labels = ['Mavericks', 'Bucks ', 'Celtics', 'LA Lakers', 'LA Clippers']
         texts = ['Dallas Mavericks', 'Milwaukee Bucks', 'Boston Celtics', 'Los Angeles Lakers', 'Los Angeles Clippers']
@@ -250,8 +239,8 @@ class TocMachine(GraphMachine):
         print("I'm entering showstanding")
         userid = event.source.user_id
         showstanding(userid)
-        
-        img = 'https://thespinoff.co.nz/wp-content/uploads/2015/11/NBA_Background_Logos-850x510.jpg'
+
+        img = 'https://baselinetimes.com/wp-content/uploads/2020/11/Screen-Shot-2020-11-13-at-12.03.48-PM-1030x497.png'
         title = 'Watch more'
         uptext = 'Search more teams or back to menu'
         labels = ['Search team', 'Back to menu']
@@ -262,7 +251,7 @@ class TocMachine(GraphMachine):
         print("I'm entering statleader")
         userid = event.source.user_id
         statleader(userid)
-        
+
         img = 'https://i.pinimg.com/originals/a6/cf/0a/a6cf0a242b87999d55a530dc5a67d3f1.jpg'
         title = 'Watch more'
         uptext = 'Search for player or back to menu'
@@ -274,8 +263,8 @@ class TocMachine(GraphMachine):
         print("I'm entering showschedule")
         userid = event.source.user_id
         showschedule(userid)
-        
-        img = 'https://thespinoff.co.nz/wp-content/uploads/2015/11/NBA_Background_Logos-850x510.jpg'
+
+        img = 'https://cdn.vox-cdn.com/thumbor/BULQdZPlxSCT68S4y18mw9slB08=/0x0:3200x1800/1820x1024/filters:focal(1344x644:1856x1156):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/66324326/TheRinger_Top25NBAPlayers_2.7.png'
         title = 'Watch more'
         uptext = 'Search for team or back to menu'
         labels = ['Search team', 'back to menu']
@@ -301,7 +290,7 @@ class TocMachine(GraphMachine):
         print("I'm entering shownews")
         userid = event.source.user_id
         shownews(userid)
-        
+
         img = 'https://i.kym-cdn.com/entries/icons/original/000/018/489/nick-young-confused-face-300x256-nqlyaa.jpg'
         title = 'Watch more'
         uptext = 'Watch NBA meme or go back to menu'
@@ -334,7 +323,3 @@ class TocMachine(GraphMachine):
         except:
             push_message(userid, "Wrong format, please try again")
             self.go_back(event)
-
-
-
-    

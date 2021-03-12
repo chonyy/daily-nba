@@ -2,52 +2,51 @@ import os
 import bs4
 import requests
 import numpy as np
-from bs4 import BeautifulSoup 
+from bs4 import BeautifulSoup
 from basketball_reference_web_scraper import client
-from basketball_reference_web_scraper.data import Team
 
-from linebot import LineBotApi, WebhookParser
-from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageSendMessage, TemplateSendMessage, TemplateAction, Template, PostbackTemplateAction, ImageCarouselColumn, ImageCarouselTemplate, ButtonsTemplate, MessageTemplateAction, URITemplateAction, BaseSize, URIImagemapAction, ImagemapArea, MessageImagemapAction, ImageSendMessage, ImagemapSendMessage, CarouselTemplate, CarouselColumn
+from linebot import LineBotApi
+from linebot.models import TextSendMessage, ImageSendMessage, TemplateSendMessage, ImageCarouselColumn, ImageCarouselTemplate, ButtonsTemplate, MessageTemplateAction, URITemplateAction, ImageSendMessage, CarouselTemplate, CarouselColumn
 
 access_token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", None)
+line_bot_api = LineBotApi(access_token)
 
 def send_text_message(reply_token, text):
-    line_bot_api = LineBotApi(access_token)
     line_bot_api.reply_message(reply_token, TextSendMessage(text=text))
 
     return "OK"
 
+
 def send_image_url(id, img_url):
-    line_bot_api = LineBotApi(access_token)
     message = ImageSendMessage(
         original_content_url=img_url,
         preview_image_url=img_url
-        )
+    )
     line_bot_api.reply_message(id, message)
 
     return "OK"
 
+
 def send_video_url(id):
-    line_bot_api = LineBotApi(access_token)
     message = ImageSendMessage(
         original_content_url='https://www.youtube.com/watch?v=bmBtgNZydk8',
         preview_image_url='https://cdn.nba.net/nba-drupal-prod/styles/landscape/s3/2018-08/leaguev3.jpeg?itok=j-c6KHL_'
-        )
+    )
     line_bot_api.push_message(id, message)
 
     return "OK"
 
+
 def send_template_message(id, imglinks):
-    line_bot_api = LineBotApi(access_token)
     cols = []
     for i, url in enumerate(imglinks):
         cols.append(
             ImageCarouselColumn(
-                    image_url=url,
-                    action=URITemplateAction(
-                        label='Meme',
-                        uri=url
-                    )
+                image_url=url,
+                action=URITemplateAction(
+                    label='Meme',
+                    uri=url
+                )
             )
         )
     message = TemplateSendMessage(
@@ -57,14 +56,14 @@ def send_template_message(id, imglinks):
     line_bot_api.push_message(id, message)
     return "OK"
 
+
 def send_image_carousel(id, imglinks, labels, texts):
-    line_bot_api = LineBotApi(access_token)
     cols = []
     for i, url in enumerate(imglinks):
         cols.append(
             ImageCarouselColumn(
-                    image_url=url,
-                    action=MessageTemplateAction(
+                image_url=url,
+                action=MessageTemplateAction(
                     label=labels[i],
                     text=texts[i]
                 )
@@ -77,9 +76,9 @@ def send_image_carousel(id, imglinks, labels, texts):
     line_bot_api.push_message(id, message)
     return "OK"
 
+
 def send_button_message(id, img, title, uptext, labels, texts):
-    line_bot_api = LineBotApi(access_token)
-    
+
     acts = []
     for i, lab in enumerate(labels):
         acts.append(
@@ -92,17 +91,17 @@ def send_button_message(id, img, title, uptext, labels, texts):
     message = TemplateSendMessage(
         alt_text='Buttons template',
         template=ButtonsTemplate(
-        thumbnail_image_url=img,
-        title=title,
-        text=uptext,
-        actions=acts
+            thumbnail_image_url=img,
+            title=title,
+            text=uptext,
+            actions=acts
         )
     )
     line_bot_api.push_message(id, message)
     return "OK"
 
+
 def send_button_carousel(id):
-    line_bot_api = LineBotApi(access_token)
     message = TemplateSendMessage(
         alt_text='Carousel template',
         template=CarouselTemplate(
@@ -171,33 +170,34 @@ def send_button_carousel(id):
 
     return "OK"
 
+
 def send_news_carousel(id, imglinks, titles, links):
-    line_bot_api = LineBotApi(access_token)
 
     cols = []
     for i, img in enumerate(imglinks):
         cols.append(
             CarouselColumn(
-                    thumbnail_image_url=img,
-                    title='NBA news',
-                    text=titles[i],
-                    actions=[
-                        URITemplateAction(
+                thumbnail_image_url=img,
+                title='NBA news',
+                text=titles[i],
+                actions=[
+                    URITemplateAction(
                         label='Read more',
                         uri=links[i]
-                        )
-                    ]
-                )
+                    )
+                ]
+            )
         )
 
     message = TemplateSendMessage(
         alt_text='Carousel template',
         template=CarouselTemplate(columns=cols)
     )
-    
+
     line_bot_api.push_message(id, message)
 
     return "OK"
+
 
 def showGames(reply_token):
     url = 'https://www.basketball-reference.com/boxscores/'
@@ -222,9 +222,9 @@ def showGames(reply_token):
                 winteamname += ' '
             else:
                 winpoint = s
-    
+
         loseteamname = ""
-        loseteam = game.find('tr', class_ ="loser").text
+        loseteam = game.find('tr', class_="loser").text
         loseteamlist = loseteam.partition('\n')[2].split()
         if loseteamlist[len(loseteamlist)-1] == 'Final':
             loseteamlist.remove('Final')
@@ -240,6 +240,7 @@ def showGames(reply_token):
 
     print(result)
     send_text_message(reply_token, result)
+
 
 def yesterGames(reply_token):
     url = 'https://www.basketball-reference.com/boxscores/'
@@ -270,9 +271,9 @@ def yesterGames(reply_token):
                 winteamname += ' '
             else:
                 winpoint = s
-    
+
         loseteamname = ""
-        loseteam = game.find('tr', class_ ="loser").text
+        loseteam = game.find('tr', class_="loser").text
         loseteamlist = loseteam.partition('\n')[2].split()
         if loseteamlist[len(loseteamlist)-1] == 'Final':
             loseteamlist.remove('Final')
@@ -289,8 +290,10 @@ def yesterGames(reply_token):
     # print(result)
     send_text_message(reply_token, result)
 
+
 def score(player):
     return player['made_three_point_field_goals'] * 3 + (player['made_field_goals'] - player['made_three_point_field_goals']) * 2 + player['made_free_throws']
+
 
 def getTeam(team):
     teamforscrape = ""
@@ -299,6 +302,7 @@ def getTeam(team):
         if(idx != len(team) - 1):
             teamforscrape += '_'
     return teamforscrape
+
 
 def scrapeBoxscore(userid, dateteam):
     month = {
@@ -325,7 +329,7 @@ def scrapeBoxscore(userid, dateteam):
     searchTeam = getTeam(datelist[3:])
 
     opponentTeam = ""
-    result = "" 
+    result = ""
 
     players = client.player_box_scores(day=gameDay, month=gameMonth, year=gameYear)
 
@@ -338,15 +342,18 @@ def scrapeBoxscore(userid, dateteam):
     for player in players:
         if(player['team'].name == searchTeam):
             result += ("\U0001F525\U000026f9\U0001F525 {} {}:{}\n" .format(player['name'], int(player['seconds_played'] / 60), player['seconds_played'] % 60))
-            result += ("{} PTS, {} AST, {} REB, {} STL, {} BLK, {} TOV\n\n" .format(score(player), player['assists'], player['offensive_rebounds'] + player['defensive_rebounds'], player['steals'], player['blocks'], player['turnovers']))
+            result += ("{} PTS, {} AST, {} REB, {} STL, {} BLK, {} TOV\n\n" .format(score(player),
+                                                                                    player['assists'], player['offensive_rebounds'] + player['defensive_rebounds'], player['steals'], player['blocks'], player['turnovers']))
 
     result += ("\U0001f3c0\U0001f3c0\U0001f3c0 {}\n\n" .format(opponentTeam))
     for player in players:
         if(player['team'].name == opponentTeam):
             result += ("\U0001F525\U000026f9\U0001F525 {} {}:{}\n" .format(player['name'], int(player['seconds_played'] / 60), player['seconds_played'] % 60))
-            result += ("{} PTS, {} AST, {} REB, {} STL, {} BLK, {} TOV\n\n" .format(score(player), player['assists'], player['offensive_rebounds'] + player['defensive_rebounds'], player['steals'], player['blocks'], player['turnovers']))
+            result += ("{} PTS, {} AST, {} REB, {} STL, {} BLK, {} TOV\n\n" .format(score(player),
+                                                                                    player['assists'], player['offensive_rebounds'] + player['defensive_rebounds'], player['steals'], player['blocks'], player['turnovers']))
 
     push_message(userid, result)
+
 
 def get(data):
     temp = ""
@@ -356,10 +363,11 @@ def get(data):
     temp += '\n'
     return temp
 
+
 def searchplayer(reply_token, userid, playertofind):
     nickname = 0
     urlhead = 'https://www.basketball-reference.com'
-    url = 'https://www.basketball-reference.com/leagues/NBA_2020_per_game.html'
+    url = 'https://www.basketball-reference.com/leagues/NBA_2021_per_game.html'
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36'}
     source = requests.get(url, headers=headers).text
     soup = BeautifulSoup(source, 'html.parser')
@@ -382,7 +390,7 @@ def searchplayer(reply_token, userid, playertofind):
 
     bio = soup.find('div', {"id": "meta"})
     ps = bio.find_all('p')
-    
+
     result = '\U0001F4DC\U0001F4DC\U0001F4DC\n'
     if(ps[0].text[:13] == 'Pronunciation'):
         result += get(ps[0])
@@ -438,6 +446,7 @@ def searchplayer(reply_token, userid, playertofind):
     carStat += ('Accuracy: {} FG%, {} FG3%, {} FT%, {} eFG%\n' .format(ps[11].text, ps[13].text, ps[15].text, ps[17].text))
     push_message(userid, carStat)
 
+
 def searchteam(reply_token, userid, teamtofind):
     urlhead = 'https://www.basketball-reference.com'
     url = 'https://www.basketball-reference.com/teams/'
@@ -466,7 +475,7 @@ def searchteam(reply_token, userid, teamtofind):
     logolink = soup.find('img', class_='teamlogo')['src']
     send_image_url(reply_token, logolink)
 
-    template = soup.find('div', {'data-template':"Partials/Teams/Summary"})
+    template = soup.find('div', {'data-template': "Partials/Teams/Summary"})
     ps = template.find_all('p')
     result = "\U000026F9\U000026F9\U000026F9\U000026F9\U000026F9\n"
     for p in ps:
@@ -474,13 +483,14 @@ def searchteam(reply_token, userid, teamtofind):
 
     push_message(userid, result)
 
+
 def showstanding(userid):
     urlhead = 'https://www.basketball-reference.com'
-    url = 'https://www.basketball-reference.com/leagues/NBA_2020_standings.html'
+    url = 'https://www.basketball-reference.com/leagues/NBA_2021_standings.html'
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36'}
     source = requests.get(url, headers=headers).text
     soup = BeautifulSoup(source, 'html.parser')
-    east = soup.find('table', {'id':'confs_standings_E'})
+    east = soup.find('table', {'id': 'confs_standings_E'})
     table = east.find('tbody')
     rows = table.find_all('tr')
 
@@ -501,7 +511,7 @@ def showstanding(userid):
         resultE += ("{} W, {} L, {} W/L%, {} GB, {} PS/G, {} PA/G\n" .format(datas[0].text, datas[1].text, datas[2].text, datas[3].text, datas[4].text, datas[5].text))
     push_message(userid, resultE)
 
-    west = soup.find('table', {'id':'confs_standings_W'})
+    west = soup.find('table', {'id': 'confs_standings_W'})
     table = west.find('tbody')
     rows = table.find_all('tr')
     resultW = '\U0001F3C3\U0001F3C3\U0001F3C3 Western Conference\n\n'
@@ -520,6 +530,7 @@ def showstanding(userid):
         datas = row.find_all('td')
         resultW += ("{} W, {} L, {} W/L%, {} GB, {} PS/G, {} PA/G\n" .format(datas[0].text, datas[1].text, datas[2].text, datas[3].text, datas[4].text, datas[5].text))
     push_message(userid, resultW)
+
 
 def statleader(userid):
     urlhead = 'https://www.basketball-reference.com'
@@ -550,6 +561,7 @@ def statleader(userid):
 
     push_message(userid, result)
 
+
 def showschedule(userid):
     urlhead = 'https://www.basketball-reference.com'
     url = 'https://www.msn.com/zh-tw/sports/nba/schedule'
@@ -569,8 +581,9 @@ def showschedule(userid):
         rowlist = row.text.split()
         result += ("\U0000231A {} {}\n" .format(rowlist[0], rowlist[1]))
         result += ("{}{} vs {}{}\n" .format(rowlist[6], rowlist[7], rowlist[11], rowlist[12]))
-        
+
     push_message(userid, result)
+
 
 def showmeme(userid):
     urlhead = 'https://www.basketball-reference.com'
@@ -583,7 +596,7 @@ def showmeme(userid):
     # print(len(imgs))
     # for img in imgs:
     #     print(img['src'])
-        
+
     imglink = []
     x = np.random.randint(0, 3, size=40)
 
@@ -600,6 +613,7 @@ def showmeme(userid):
         imglink.append(imgs[rand[i]]['src'])
 
     send_template_message(userid, imglink)
+
 
 def shownews(userid):
     urlhead = 'https://basketball.realgm.com'
@@ -622,6 +636,7 @@ def shownews(userid):
         titles.append(title)
         links.append(link)
     send_news_carousel(userid, imglinks, titles, links)
+
 
 def searchgame(reply_token, date):
     month = {
@@ -668,9 +683,9 @@ def searchgame(reply_token, date):
                 winteamname += ' '
             else:
                 winpoint = s
-    
+
         loseteamname = ""
-        loseteam = game.find('tr', class_ ="loser").text
+        loseteam = game.find('tr', class_="loser").text
         loseteamlist = loseteam.partition('\n')[2].split()
         if loseteamlist[len(loseteamlist)-1] == 'Final':
             loseteamlist.remove('Final')
@@ -687,13 +702,7 @@ def searchgame(reply_token, date):
     # print(result)
     send_text_message(reply_token, result)
 
+
 def push_message(userid, msg):
-    line_bot_api = LineBotApi(access_token)
     line_bot_api.push_message(userid, TextSendMessage(text=msg))
     return "OK"
-
-
-"""
-def send_button_message(id, text, buttons):
-    pass
-"""

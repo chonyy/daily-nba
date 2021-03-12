@@ -1,8 +1,8 @@
 from fsm import TocMachine
 
 
-def get_machine_configs():
-    machine_configs = TocMachine(
+def create_machine():
+    machine = TocMachine(
         states=["user", "testing", "searchplayer", "watchGame", "todayGame", "yesterGame", "showplayer", "lobby", "gameBoxscore", "showBoxscore",
                 "searchteam", "showteam", "showstanding", "statleader", "showschedule", "showmeme", "shownews", "searchgame", "showsearchgame"],
         transitions=[
@@ -201,4 +201,4 @@ def get_machine_configs():
         show_conditions=True,
     )
 
-    return machine_configs
+    return machine
