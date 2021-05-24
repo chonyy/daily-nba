@@ -13,11 +13,11 @@
 
 > 🏀 The NBA LINE Bot with 9 features!
 
-Watch NBA games, check the schedule, lookup the stats, search for players by using Daily-NBA. [Button carousel templates](https://developers.line.biz/en/reference/messaging-api/#buttons) are used for every states. Instead of typing bunch of word to the LINE bot, you can just simply **press buttons** on the carousel template. 
+Watch NBA games, check the schedule, lookup the stats, search for players by using Daily-NBA. [Button carousel templates](https://developers.line.biz/en/reference/messaging-api/#buttons) are designed and implemented in every feature. Instead of directly typing the commands to the LINE bot, users can just simply **press buttons** on the carousel template to browse the features and access the NBA information!
 
 This LINE bot is mostly built by [LINE messaging API](https://developers.line.biz/en/docs/messaging-api/overview/), and a little [Flask](https://www.palletsprojects.com/p/flask/) as web application framework to host it on Heroku.
 
-[**Finite State Machine**](https://en.wikipedia.org/wiki/Finite-state_machine) model is implemeted in Daily-NBA. Each feature is represented by a state, and the button that user pressed on the carousel template will trigger the transitions between states. The FSM graph is shown below.
+[**Finite State Machine**](https://en.wikipedia.org/wiki/Finite-state_machine) is implemented for the state management of the users. A FSM is maintained for each individual user. This way, every user has their own independent state, and the operations between two different users will not affect each other.
 
 ## FSM
 
