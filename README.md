@@ -20,7 +20,7 @@ There are four main componenets in this project
 - **LINE Bot SDK:** Built by the official [LINE Messaging API](https://developers.line.biz/en/docs/messaging-api/overview/)
 - **Web Scraping:** Use [BeutifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) to scrape several websites to retrieve NBA information
 - **Backend:** Built the backend with [Flask](https://www.palletsprojects.com/p/flask/) to handle the webhook
-- **FSM:**: Create FSM with [pytransitions](https://github.com/pytransitions/transitions) for the users state management
+- **FSM:** Create FSMs with [pytransitions](https://github.com/pytransitions/transitions) for the users state management
 
 ## FSM
 
