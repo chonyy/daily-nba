@@ -15,15 +15,20 @@
 
 Watch NBA games, check the schedule, lookup the stats, search for players by using Daily-NBA. [Button carousel templates](https://developers.line.biz/en/reference/messaging-api/#buttons) are designed and implemented in every feature. Instead of directly typing the commands to the LINE bot, users can just simply **press buttons** on the carousel template to browse the features and access the NBA information!
 
-This LINE bot is mostly built by [LINE messaging API](https://developers.line.biz/en/docs/messaging-api/overview/), and a little [Flask](https://www.palletsprojects.com/p/flask/) as web application framework to host it on Heroku.
+There are four main componenets in this project
 
-[**Finite State Machine**](https://en.wikipedia.org/wiki/Finite-state_machine) is implemented for the state management of the users. A FSM is maintained for each individual user. This way, every user has their own independent state, and the operations between two different users will not affect each other.
+- **LINE Bot SDK:** Built by the official [LINE Messaging API](https://developers.line.biz/en/docs/messaging-api/overview/)
+- **Web Scraping:** Use [BeutifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) to scrape several websites to retrieve NBA information
+- **Backend:** Built the backend with [Flask](https://www.palletsprojects.com/p/flask/) to handle the webhook
+- **FSM:**: Create FSM with [pytransitions](https://github.com/pytransitions/transitions) for the users state management
 
 ## FSM
 
 <p align=center>
     <img src="img/fsm.png">
 </p>
+
+[**Finite State Machine**](https://en.wikipedia.org/wiki/Finite-state_machine) is implemented for the state management of the users. A FSM is maintained for each individual user. This way, every user has their own independent state, and the operations between two different users will not affect each other.
 
 Finite state machine is a model in [Theory of Computation](https://en.wikipedia.org/wiki/Theory_of_computation). This model is implemented in Daily-NBA. Each feature is represented by a **state**, and the button that user pressed on the carousel template will trigger the **transitions** between states. The FSM graph is drawn by **GraphMachine** in [transitions.extensions](https://github.com/pytransitions/transitions).
 
